@@ -260,9 +260,15 @@ The algorithm for CFAR is implemented for you, but you need to finish implementi
 **Instructions:**  
 1. **Complete the beamforming code** - for the function *beamform_2d()* indicated by **TODO** in [task3_tracking_TODO.py](task3_tracking_TODO.py). Here you will just be performing beamforming for a bird-eye-view plot, meaning you only need to calculate azimuth (horizontal) angles by the range (depth).  
     The equation for calculating the steering vector for each angle (same as Algorithm 1 in lecture 8, but note the sign difference, in this lab you will use a positive phase in the steering vector) is:
-$$
-h_{\varphi} = e^{j \frac{2\pi}{\lambda} (d_n \cos\varphi)}
-$$
+    
+      <p align="center">
+        <img 
+          alt="h_{\varphi} = e^{j \frac{2\pi}{\lambda} (d_n \cos\varphi)}"
+          src="https://latex.codecogs.com/svg.latex?h_%7B%5Cvarphi%7D%3De%5E%7Bj%5Cfrac%7B2%5Cpi%7D%7B%5Clambda%7D%28d_n%5Ccos%5Cvarphi%29%7D"
+        />
+      </p>
+
+
     Where `d_n` is the location of antenna `n`, and `N` is the total number of antennas.  The antenna locations are given in `x_locs` and the angle is given as `phi` in the code.
     And as in lecture 8, algorithm 1 you will be doing the following (you will just need to implement calculating $h_{\phi}$):
       1) Mix the RX signal with TX. (Already done by the radar itself)  
