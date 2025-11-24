@@ -266,6 +266,7 @@ The algorithm for CFAR is implemented for you, but you need to finish implementi
         e^{j \frac{2\pi}{\lambda} 
         \left(d_n \cos\varphi  \right)}
     ```
+    
     Where `d_n` is the location of antenna `n`, and `N` is the total number of antennas.  The antenna locations are given in `x_locs` and the angle is given as `phi` in the code.
     And as in lecture 8, algorithm 1 you will be doing the following (you will just need to implement calculating $h_{\varphi}$):
       1) Mix the RX signal with TX. (Already done by the radar itself)  
