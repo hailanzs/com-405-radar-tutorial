@@ -88,8 +88,11 @@ The provided Lua code automatically runs all the necessary commands, so there is
 **Tip:** When mmWave Studio opens it does **not** automatically show the *Output* tab, which tells you whether your scripts are running successfully or failing. Go to the top left: **View → Output** to enable it. Then, when you run any of the Python scripts you can see in the Output window if there are any errors relating to mmWave Studio setup.
 It is also useful to look through the RadarAPI tab in mmWave Studio (which should automatically open). Inside this window, the **RampTimingCalculator** tab will be **very** useful for Task 2.
 
-#### 6 files are given:
-- [scripts/1843_config.lua](scripts/1843_config.lua) formats the radar waveform on the board for task 1.
+#### 9 files are given:
+- [scripts/1843_config_lowres.lua](scripts/1843_config_lowres.lua) formats the radar waveform on the board for task 1 low resolution.
+- [scripts/1843_config_highres.lua](scripts/1843_config_highres.lua) formats the radar waveform on the board for task 1 high resolution.
+- [scripts/1843_config_lowrange.lua](scripts/1843_config_lowrange.lua) formats the radar waveform on the board for task 1 short range.
+- [scripts/1843_config_highrange.lua](scripts/1843_config_highrange.lua) formats the radar waveform on the board for task 1 long resolution.
 - [scripts/1843_record.lua](scripts/1843_scripts.lua) is used to capture data for task 1 and 2.
 - [scripts/1843_config_debug_task3.lua](scripts/1843_config_debug_task3.lua) is used to configure and capture 1000 frames for debugging task 3.
 - [scripts/1843_config_debug_task4.lua](scripts/1843_config_debug_task4.lua) is used to configure and capture 20000 frames for debugging task 4.
