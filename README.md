@@ -22,7 +22,7 @@ In this hands-on session, you will learn how to work with **FMCW** millimeter wa
 - basic knowledge of FMCW waveforms and radars that was taught in the lecture
 - basic Python knowledge
 
-You are required to work in teams of 3-4 where you have *at least* one Windows machine. You will also need to have 2 USB ports and an Ethernet port. Dongles will be provided if necessary.  
+You are required to work in teams of 3-4 where you have at least one Windows machine to run the radar. You will also need to have 2 USB ports and an Ethernet port. Dongles to USB-C will be provided if necessary.  
 
 The radar setup includes two PCBs:
 - **Red radar board (TI XWR1843BOOST):** contains antennas and radar hardware. All waveform configuration and frame settings happen here.  
@@ -46,15 +46,15 @@ Follow the steps in the [radar setup document](https://www.overleaf.com/read/htg
 - Estimated setup time: 40 minutes. Notify your TA if it takes longer. 
 - If possible you should try to start this installation before the tutorial time as it can take some time.
 
-Quick note: If you installed the software set up before the day of the tutorial, make sure to also run this in your conda env:
+Quick note: If you installed the software set up before the day of the tutorial, make sure to also run this in your conda env (or install pyserial in your Python env):
 ```bash
 conda install pyserial
 ```
 
 ### Hardware Installation
-To have the radar working it requires:
-- plug the 2 micro USB cables and Ethernet cable into your computer
-- The red radar board should be powered with a 5V power supply and the switch on the DCA1000EVM (green board) should be set to 5V_RADAR_IN (S3) so that the radar board is powering the green board. (Note: you should power the red radar board only with the 5V power supply).
+To begin powering the radar board:
+- Plug the 2 micro USB cables and Ethernet cable into your computer
+- The **red radar board should be powered with a 5V power supply** and the switch on the DCA1000EVM (green board) should be set to 5V_RADAR_IN (S3) so that the radar board is powering the green board. (Note: you should power the red radar board only with the 5V power supply).
 - Plug the micro-USB into the red board 
 - Plug the micro-USB into the DCA1000EVM making sure it is in the port `RADAR_FTDI`.
 
@@ -76,10 +76,10 @@ In FMCW radars, the transmit signal is a single tone with its frequency changing
 
 There are two ways to capture data:
 
-1. The first and easiest(?) way (which we will not really use) is using the **Connection** tab in the RadarAPI window. This requires manually resetting the board, connecting to it, loading various drivers, etc., but you do **not** have to write any Lua.
-2. The second way uses **Lua scripts**. This uses mmWave Studio to run Lua files. 
+1. The first and easiest(?) way (which we will not use) is using the **Connection** tab in the RadarAPI window. This requires manually resetting the board, connecting to it, loading various drivers, etc., but you do **not** have to write any Lua.
+2. The second way uses **Lua scripts**, which is what this tutorial relies on. This uses mmWave Studio to run Lua files. 
 
-**Lua Files**: These radars use the programming language Lua to set the paramters of the FMCW waveform (in other words chirp parameters), how many frames to capture, and so on. You don't need to know how to write anything in Lua, as we have provided variables at the tops of each of these files which you can edit. It is important that you do not change the variable *name* at all, since the code reads the variables in order to grab the paramters for post processing (this will always be in the function *utility.read_radar_params*). 
+**Lua Files**: These radars use the programming language Lua to set the paramters of the FMCW waveform (in other words: chirp parameters), how many frames to capture, and so on. You don't need to know how to write anything in Lua, as we have provided variables at the tops of each of these files which you can edit. It is important that you do not change the variable *name* at all, since the code reads the variables in order to grab the paramters for post processing (this will always be in the function *utility.read_radar_params*). 
 
 Each of the variables have a description of what the variable represent. Some of the variables, such as `FREQ_SLOPE` and `SAMPLE_RATE` you should be able to relate it back to the lecture. Other variables like `IDLE_TIME` or `RAMP_END_TIME` are variables that are constrained by the slope, sampling rate and number of digital samples you collect (`ADC_SAMPLES`). See figure of the FMCW Chirp for a visualization of the chirp what these variables represent.
 
@@ -95,6 +95,10 @@ It is also useful to look through the RadarAPI tab in mmWave Studio (which shoul
 - [scripts/1843_config_debug_task4.lua](scripts/1843_config_debug_task4.lua) is used to configure and capture 20000 frames for debugging task 4.
 - [scripts/1843_config_streaming_task3.lua](scripts/1843_config_streaming_task3.lua) is used to configure and continously capture data for task 3.
 - [scripts/1843_config_streaming_task4.lua](scripts/1843_config_streaming_task4.lua) is used to configure and continously capture data for task 4.
+
+
+**Deliverables** 
+Show the TA the radar correctly plugged in and set up.
 
 ---
 
@@ -136,7 +140,7 @@ We recommend you place the radar similar to the image below where it is standing
 
 Make sure mmWave studio is open, and for all of the parts moving forward, you **need mmWave Studio to be open in the background** since Python is calling Lua scripts to be run in mmWave Studio. For realtime code in tasks 3, 4, 5, there are more instructions on what needs to be done regarding mmWave Studio.
 
-Run in whichever Terminal you have your python environment:
+Run in whichever Terminal you have your python environment (if you are not sure and installed Anaconda, we recommend using Anaconda Prompt):
 ```bash
 python configure.py
 ```
@@ -174,6 +178,10 @@ ar1.CaptureCardConfig_StartRecord(SAVE_DATA_PATH, 1)
 ```
 The data is stored as a binary file, which you must post-process to extract the raw ADC data for further signal processing. Double check that a `*.bin` file is saved in your data folder.
 
+
+**Deliverables** 
+Show the TA the data successfully captured.
+
 ---
 For all Tasks moving forward, there is a corresponding python script. The general outline is in the README.md, but see each python script for more details on where to edit.
 
@@ -182,7 +190,7 @@ Goal: capture experiments demonstrating radar's range estimation ability and exp
 
 **Instructions:**  
 1. **Write range estimation code** - write the code required to take the raw data samples from the radar and calculating the (Range FFT), indicated by **TODO** at the top of [task2_ranging_TODO.py](task2_ranging_TODO.py). Note: the output of the radar is already after mixing the received signal with a copy of the transmitted signal so there is no need to do that.
-2. **Run a basic experiment** - capture data where you place two reflectors in front of the radar about 10cm away from each other. You can use your hands, or laptops or anything that will reflect signals back to the radar. You can use the command:
+2. **Run a basic experiment** - capture data where you place two reflectors in front of the radar about 10cm away from each other. You can use your hands, or laptops or anything that will reflect signals back to the radar. Making sure mmWave Studio is open whenever you are capturing data, you can use the command:
 ```bash
 python task1_capture.py --config scripts/1843_config_lowres --exp_name lowres
 ```
@@ -191,11 +199,11 @@ Then process the data with [task2_ranging_TODO.py](task2_ranging_TODO.py):
 ```bash 
 python task2_ranging_TODO.py --config scripts/1843_config_lowres --exp_name lowres
 ```
-This takes the chirp configs from [scripts/1843_config_lowres.lua](scripts/1843_config_lowres.lua) and the experiment named `lowres_Raw_0.bin` and processes it with the range FFT and plots it. You should one peak around the location of the two reflectors you have. This is because the range resolution of this configuration is aroun 17.5cm. 
+This takes the chirp configs from [scripts/1843_config_lowres.lua](scripts/1843_config_lowres.lua) and the experiment named `lowres_Raw_0.bin` and processes it with the range FFT and plots it. You should see one peak around the location of the two reflectors you have. This is because the range resolution of this configuration is aroun 17.5cm. 
 
-2. **Change range resolution** – adjust the radar configuration (namely IDLE_TIME, ADC_START_TIME, FREQ_SLOPE, ADC_SAMPLES, SAMPLE_RATE) in [scripts/1843_config_highres.lua](scripts/1843_config_highres.lua) to show how the parameters can resolve the same two reflectors 10cm apart, in other words you want to change the *range resolution*. (Refer to the lecture on how different chirp parameters affect the range resolution.)
+2. **Change range resolution** – adjust the radar configuration (namely IDLE_TIME, ADC_START_TIME, FREQ_SLOPE, ADC_SAMPLES, SAMPLE_RATE) in [scripts/1843_config_highres.lua](scripts/1843_config_highres.lua) to show how the parameters can resolve the same two reflectors 10cm apart, in other words you want to change the *range resolution*. (Refer to the lecture on how different chirp parameters affect the range resolution or take a look at [chirp parameters document](https://www.ti.com/lit/an/swra553a/swra553a.pdf?ts=1715668268824&ref_url=https%253A%252F%252Fdev.ti.com%252F) prepared by TI (section 2.1).)
 
-    In order to correctly program the radars, when you can change the Slope, ADC Samples and Sample Rate, but it also affects the Idle Time, ADC Start Time (time to start sampling) and the Ramp End Time. Which are denoted in the FMCW chirp figure and the image below. So you should use the Ramp Timing Calculator in mmWave Studio RadarAPI to set the Slope, ADC Samples and Sample Rate that you want, and then calculate the 99% Setting for Idle Time, ADC Start Time and Ramp End Time which you will also need to update in the Lua file. Note that the radar is limited to 4GHz bandwidth, and the Slope, ADC Samples and Sample Rate all have minimum and maximum values.
+    In order to correctly program the radars, you can change the Slope, ADC Samples and Sample Rate, but it also affects the Idle Time, ADC Start Time (time to start sampling) and the Ramp End Time. Which are denoted in the FMCW chirp figure and the image below. So you should use the Ramp Timing Calculator in mmWave Studio RadarAPI to set the Slope, ADC Samples and Sample Rate that you want, and then calculate the 99% Setting for Idle Time, ADC Start Time and Ramp End Time which you will also need to update in the Lua file. Note that the radar is limited to 4GHz bandwidth, and the Slope, ADC Samples and Sample Rate all have minimum and maximum values, so some settings might not work.
 
     ![Alt text](images/timing-calc.png)
 
@@ -214,7 +222,7 @@ This takes the chirp configs from [scripts/1843_config_lowres.lua](scripts/1843_
 
 3. **Change max range** – adjust the radar configuration to see the effect that changing the *maximum range* on the heatmap. Change the parameters in [scripts/1843_config_highrange.lua](scripts/1843_config_highrange.lua) to create a configuration that captures the wall opposite you. And also change the parameters in the file [scripts/1843_config_lowrange.lua](scripts/1843_config_lowrange.lua) to create a configuration that either does not capture the wall opposite you or visibly shows the difference in maximum range. You can capture data and process data in the same way as for 2 above.
 
-Tip: You may consult the [chirp parameters document](https://www.ti.com/lit/an/swra553a/swra553a.pdf?ts=1715668268824&ref_url=https%253A%252F%252Fdev.ti.com%252F) prepared by TI (section 2.1) or the lecture slides for understanding how the different parameters affect the radar's range estimation abilities. 
+<!-- Tip: You may consult the [chirp parameters document](https://www.ti.com/lit/an/swra553a/swra553a.pdf?ts=1715668268824&ref_url=https%253A%252F%252Fdev.ti.com%252F) prepared by TI (section 2.1) or the lecture slides for understanding how the different parameters affect the radar's range estimation abilities.  -->
 
 <!-- **Running the code**
 You should capture data using the task1 file and creating new Lua Files for the 3 other radar configurations you use. 
@@ -259,7 +267,7 @@ The algorithm for CFAR is implemented for you, but you need to finish implementi
 
 **Instructions:**  
 1. **Complete the beamforming code** - for the function *beamform_2d()* indicated by **TODO** in [task3_tracking_TODO.py](task3_tracking_TODO.py). Here you will just be performing beamforming for a bird-eye-view plot, meaning you only need to calculate azimuth (horizontal) angles by the range (depth).  
-    The equation for calculating the steering vector for each angle (same as Algorithm 1 in lecture 8, but note the sign difference, in this lab you will use a positive phase in the steering vector) is:
+    The equation for calculating the steering vector for each angle and antenna (same as Algorithm 1 in lecture 8, but note the sign difference, in this lab you will use a positive phase in the steering vector) is:
     
       <p align="center" style="background:white; padding:10px; display:inline-block;">
         <img 
@@ -269,7 +277,7 @@ The algorithm for CFAR is implemented for you, but you need to finish implementi
       </p>
 
 
-    Where `d_n` is the location of antenna `n`, and `N` is the total number of antennas.  The antenna locations are given in `x_locs` and the angle is given as `phi` in the code.
+    Where `d_n` is the location of antenna `n`, `phi` is the angle you are calculating, and $\lambda$ is the wavelength at 77GHz.  The antenna locations are given in `x_locs`, wavelength is given by `lm` and the angle is given as `phi` in the code.
     And as in lecture 8, algorithm 1 you will be doing the following (you will just need to implement calculating $h_{\phi}$):
       1) Mix the RX signal with TX. (Already done by the radar itself)  
       2) Compute Range FFT. (Done in the debug and real-time code for you already)  
@@ -284,7 +292,7 @@ The algorithm for CFAR is implemented for you, but you need to finish implementi
 
 2. **Run the code in real-time** - 
 
-    For real time processing begin by running (if you have an error in plotting, **you might have to run your terminal (whichever terminal you are using) separately in admin mode and run from there**): 
+    For real time processing (make sure mmWave Studio is open), begin by running (if you have an error in plotting, **you might have to run your terminal (whichever terminal you are using) separately in admin mode and run from there**): 
     ```bash 
     python task3_tracking_realtime.py --config
     ```
@@ -343,7 +351,7 @@ The following steps are done to extract heart rate and breathing rates (in bold 
       </td>
       <td style="text-align:center">
         <img src="debug_imgs/task4_hr_fft.png" width="400"><br>
-        <b>Heart Rate FFT</b>
+        <b>Cropped at Heart Rate FFT</b>
       </td> 
     </tr>
     </table>
@@ -351,7 +359,7 @@ The following steps are done to extract heart rate and breathing rates (in bold 
 
     Once your plots output from this match the debug images for task4, then you should first capture a non-realtime experiment.
 2. **Capture an experiment for heartrate and breathing monitoring**:
-      To run this experiment you will run [task1_capture.py](task1_capture.py) again but using the configuration file [scripts\1843_config_debug_task4.lua](scripts\1843_config_debug_task4.lua) and changing the experiment name.
+      To run this experiment you will make sure mmWave Studio is open, then run [task1_capture.py](task1_capture.py) again but using the configuration file [scripts\1843_config_debug_task4.lua](scripts\1843_config_debug_task4.lua) and changing the experiment name.
       ```bash
       python task1_capture.py --config scripts/1843_config_debug_task4 --exp_name task4_student
       ```
@@ -397,7 +405,7 @@ Show the following to your TA:
 Goal: perform around-the-corner localization.  
 The fun thing about wireless signals is not only that they can pass through occlusions, but they can also reflect off of surfaces! This means, if you are near a corner, you can reflect the signals off of something like the wall, and see things around the corner :o. 
 
-For occlusions, you will most likely see both the occlusion, but also reflectors behind that occlusion (depending on the material of the occlusion you might not even see it very well).
+For occlusions, you will most likely see the occlusion, but also reflectors behind that occlusion (depending on the material of the occlusion you might not even see it very well).
 
 For simple reflections like if your wireless signal reflects off of a wall or *planar surface* then if you process the received signal as usual (meaning you don't assume there is just normal reflectinos in the scene), there will be a *reflected version* of the object that is around the corner. If we were to process the scene assuming there is a reflector at the correct location then the object will appear in the correct location again, but we will not do that in this tutorial.
 
